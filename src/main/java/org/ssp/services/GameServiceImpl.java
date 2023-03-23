@@ -16,9 +16,12 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void createGame(User user) {
-        Game game = new Game();
-        game.setUser(user);
-        repository.save(game);
+        Game lastGame = repository.getLastGame(user);
+        if (lastGame == null) {
+            Game game = new Game();
+            game.setUser(user);
+            repository.save(game);
+        }
     }
 
     @Override
@@ -28,14 +31,14 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void stepSecond(User userId, StepValues step) {
-        Game lastGame = repository.getLastGame(userId);
+    public void stepSecond(User user, StepValues step) {
+        Game lastGame = repository.getLastGame(user);
         repository.setStep2(lastGame.getId(), getRandomValue(), step);
     }
 
     @Override
-    public void stepThird(User userId, StepValues step) {
-        Game lastGame = repository.getLastGame(userId);
+    public void stepThird(User user, StepValues step) {
+        Game lastGame = repository.getLastGame(user);
         repository.setStep3(lastGame.getId(), getRandomValue(), step);
     }
 
