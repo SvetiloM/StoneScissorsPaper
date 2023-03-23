@@ -12,8 +12,10 @@ public class User {
     private Integer id;
     @Column(unique = true)
     private String login;
+    @Column(nullable = false)
     private String password;
     private Date authorisation_date;
+    @Column(nullable = false)
     private Date registration_date;
 
     public Integer getId() {
