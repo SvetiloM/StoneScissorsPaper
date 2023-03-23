@@ -8,7 +8,9 @@ import java.util.Date;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Integer id;
+    @Column(unique = true)
     private String login;
     private String password;
     private Date authorisation_date;
