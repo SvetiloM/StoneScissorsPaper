@@ -63,7 +63,7 @@ public class GameServiceTest {
     @Test
     @Order(2)
     public void stepFirst() {
-        service.stepFirst(savedUser, StepValues.PAPER);
+        service.step(savedUser, StepValues.PAPER);
 
         Game lastGame = gameRepository.getLastGame(savedUser);
         Assertions.assertEquals(lastGame.getUser_step_1(), StepValues.PAPER);
@@ -73,7 +73,7 @@ public class GameServiceTest {
     @Test
     @Order(3)
     public void stepSecond() {
-        service.stepSecond(savedUser, StepValues.SCISSORS);
+        service.step(savedUser, StepValues.SCISSORS);
 
         Game lastGame = gameRepository.getLastGame(savedUser);
         Assertions.assertEquals(lastGame.getUser_step_2(), StepValues.SCISSORS);
@@ -83,7 +83,7 @@ public class GameServiceTest {
     @Test
     @Order(4)
     public void stepThird() {
-        service.stepThird(savedUser, StepValues.STONE);
+        service.step(savedUser, StepValues.STONE);
 
         Game lastGame = gameRepository.getLastGame(savedUser);
         Assertions.assertEquals(lastGame.getUser_step_3(), StepValues.STONE);

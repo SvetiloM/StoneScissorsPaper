@@ -1,28 +1,12 @@
 package org.ssp;
 
-import com.esotericsoftware.kryonet.Client;
+public interface SspClient {
+    void signUp(Command command, String login, String password);
 
-import java.io.IOException;
+    void signIn(Command command, String login, String password);
 
-public class SspClient {
-    private Client client;
+    void start(Command command, String login);
 
-    public SspClient() {
-        client = new Client();
-        client.start();
-        Network.register(client);
+    void step(Command command, String login, StepValues step);
 
-        final String host = "localhost";
-
-        new Thread("Connect") {
-            public void run () {
-                try {
-                    client.connect(5000, host, Network.port);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                    System.exit(1);
-                }
-            }
-        }.start();
-    }
 }

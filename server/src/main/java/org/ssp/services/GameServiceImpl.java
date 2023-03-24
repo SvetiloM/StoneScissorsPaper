@@ -27,21 +27,15 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void stepFirst(User user, StepValues step) {
+    public void step(User user, StepValues step) {
         Game lastGame = repository.getLastGame(user);
-        repository.setStep1(lastGame.getId(), getRandomValue(), step);
-    }
-
-    @Override
-    public void stepSecond(User user, StepValues step) {
-        Game lastGame = repository.getLastGame(user);
-        repository.setStep2(lastGame.getId(), getRandomValue(), step);
-    }
-
-    @Override
-    public void stepThird(User user, StepValues step) {
-        Game lastGame = repository.getLastGame(user);
-        repository.setStep3(lastGame.getId(), getRandomValue(), step);
+        if (lastGame.getGame_step_1() == null) {
+            repository.setStep1(lastGame.getId(), getRandomValue(), step);
+        } else if (lastGame.getGame_step_2() == null) {
+            repository.setStep2(lastGame.getId(), getRandomValue(), step);
+        } else if (lastGame.getGame_step_3() == null) {
+            repository.setStep3(lastGame.getId(), getRandomValue(), step);
+        }
     }
 
     private StepValues getRandomValue() {

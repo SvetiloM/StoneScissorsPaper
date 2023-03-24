@@ -8,10 +8,10 @@ import static org.ssp.Command.LOGOUT;
 
 public class Main {
 
-    private static CommandController commandController = new CommandControllerImpl();
+    private static SspClient client;
 
     public static void main(String[] args) {
-        new SspClient();
+        client = new SspClientImpl();
         Scanner scanner = new Scanner(System.in);
 
         scanExecuteCommands(scanner);
@@ -37,20 +37,24 @@ public class Main {
         switch (command) {
             case SIGNUP -> {
                 if (args.length == 2)
-                    commandController.signUp(args[0], args[1]);
+                    client.signUp(command, args[0], args[1]);
             }
             case SIGNIN -> {
                 if (args.length == 2)
-                    commandController.signIn(args[0], args[1]);
+                    client.signIn(command, args[0], args[1]);
             }
             case START -> {
-                commandController.start("");
+                //todo token
+                client.start(command, "");
             }
             case ROCK -> {
+                client.step(command, "", StepValues.STONE);
             }
             case PAPER -> {
+                client.step(command, "", StepValues.PAPER);
             }
             case SCISSORS -> {
+                client.step(command, "", StepValues.SCISSORS);
             }
         }
     }
