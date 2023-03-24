@@ -4,8 +4,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.ssp.services.ResultValues;
-import org.ssp.services.StepValues;
+import org.ssp.ResultValues;
+import org.ssp.StepValues;
 import org.ssp.repository.entity.Game;
 import org.ssp.repository.entity.User;
 

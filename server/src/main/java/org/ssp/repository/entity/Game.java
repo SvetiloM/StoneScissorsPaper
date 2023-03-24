@@ -1,8 +1,8 @@
 package org.ssp.repository.entity;
 
 import jakarta.persistence.*;
-import org.ssp.services.ResultValues;
-import org.ssp.services.StepValues;
+import org.ssp.ResultValues;
+import org.ssp.StepValues;
 
 @Entity
 public class Game {
