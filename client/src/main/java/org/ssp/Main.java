@@ -11,6 +11,7 @@ public class Main {
     private static CommandController commandController = new CommandControllerImpl();
 
     public static void main(String[] args) {
+        new SspClient();
         Scanner scanner = new Scanner(System.in);
 
         scanExecuteCommands(scanner);
