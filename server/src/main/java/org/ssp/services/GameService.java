@@ -7,11 +7,11 @@ public interface GameService {
 
     void createGame(User user);
 
-    void stepFirst(User userId, StepValues name);
+    void stepFirst(User userId, StepValues step);
 
-    void stepSecond(User userId, StepValues name);
+    void stepSecond(User userId, StepValues step);
 
-    void stepThird(User userId, StepValues name);
+    void stepThird(User userId, StepValues step);
 
     void countResult(Game game);
 
