@@ -19,7 +19,6 @@ public class SspClientImpl implements SspClient {
             public void received(Connection c, Object object) {
                 if (object instanceof Network.AuthorisationToken) {
                     Network.AuthorisationToken authToken = (Network.AuthorisationToken) object;
-                    System.out.println("токен получен");
                     token = authToken.token;
                 }
             }
