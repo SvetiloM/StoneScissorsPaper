@@ -12,11 +12,29 @@ public class Network {
         kryo.register(String[].class);
         kryo.register(Command.class);
         kryo.register(Args.class);
+        kryo.register(Authorisation.class);
+        kryo.register(AuthorisationToken.class);
+        kryo.register(Registration.class);
     }
 
     public static class Args {
         public Command command;
+        public String login;
         public String[] args;
+    }
+
+    public static class Authorisation {
+        public String login;
+        public String password;
+    }
+
+    public static class AuthorisationToken {
+        public String token;
+    }
+
+    public static class Registration {
+        public String login;
+        public String password;
     }
 
 }

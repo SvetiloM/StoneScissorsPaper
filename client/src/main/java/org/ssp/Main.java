@@ -44,17 +44,16 @@ public class Main {
                     client.signIn(command, args[0], args[1]);
             }
             case START -> {
-                //todo token
-                client.start(command, "");
+                client.start(command);
             }
             case ROCK -> {
-                client.step(command, "", StepValues.STONE);
+                client.step(command, StepValues.STONE);
             }
             case PAPER -> {
-                client.step(command, "", StepValues.PAPER);
+                client.step(command, StepValues.PAPER);
             }
             case SCISSORS -> {
-                client.step(command, "", StepValues.SCISSORS);
+                client.step(command, StepValues.SCISSORS);
             }
         }
     }

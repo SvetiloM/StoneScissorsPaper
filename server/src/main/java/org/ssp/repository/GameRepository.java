@@ -11,8 +11,8 @@ import org.ssp.repository.entity.User;
 
 public interface GameRepository extends CrudRepository<Game, Integer> {
 
-    @Query("SELECT g from Game g where g.user=?1 and result=NULL")
-    Game getLastGame(User user);
+    @Query("SELECT g from Game g where g.user.id=?1 and result=NULL")
+    Game getLastGame(Integer user);
 
     @Transactional
     @Modifying

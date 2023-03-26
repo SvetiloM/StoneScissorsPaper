@@ -18,4 +18,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     @Query("UPDATE User u SET u.authorisation_date=?2 WHERE u.login=?1")
     void updateUser(String login, Date authorisationDate);
 
+    @Query("SELECT u from User u where u.login=?1")
+    User selectByLogin(String login);
+
 }

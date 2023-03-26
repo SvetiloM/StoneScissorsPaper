@@ -9,10 +9,10 @@ import org.ssp.repository.entity.User;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class SignServiceTest {
+public class UserServiceTest {
 
     @Autowired
-    private SignService service;
+    private UserService service;
 
     @Autowired
     private UserRepository repository;
@@ -27,7 +27,7 @@ public class SignServiceTest {
         String login = "loginSuccess";
         String password = "passwordSuccess";
 
-        service.SignUp(login, password);
+        service.signUp(login, password);
 
         Assertions.assertNotNull(repository.getPassword(login));
     }
@@ -36,10 +36,10 @@ public class SignServiceTest {
     public void SignUpFail() {
         String login = "loginFail";
         String password = "passwordFail";
-        service.SignUp(login, password);
+        service.signUp(login, password);
 
         Assertions.assertThrows(DataIntegrityViolationException.class,
-                () -> service.SignUp(login, password));
+                () -> service.signUp(login, password));
     }
 
     //todo add fail tests after adding exceptions
@@ -47,9 +47,9 @@ public class SignServiceTest {
     public void SignInSuccess() {
         String login = "signInSuccess";
         String password = "signInPassword";
-        service.SignUp(login, password);
+        service.signUp(login, password);
 
-        service.SignIn(login, password);
+        service.signIn(login, password);
 
         for (User user : repository.findAll()) {
             if (user.getLogin().equals(login)) {
@@ -57,5 +57,16 @@ public class SignServiceTest {
                 return;
             }
         }
+    }
+
+    @Test
+    public void getUserSuccess() {
+        String login = "getUserSuccess";
+        String password = "getUserPassword";
+        service.signUp(login, password);
+        service.signIn(login, password);
+
+        User user = service.getUser(login);
+        Assertions.assertNotNull(user);
     }
 }

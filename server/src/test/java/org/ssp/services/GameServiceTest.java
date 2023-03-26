@@ -50,11 +50,11 @@ public class GameServiceTest {
     @Test
     @Order(1)
     public void createGame() {
-        Game previousGame = gameRepository.getLastGame(savedUser);
+        Game previousGame = gameRepository.getLastGame(savedUser.getId());
 
         service.createGame(savedUser);
 
-        Game currentGame = gameRepository.getLastGame(savedUser);
+        Game currentGame = gameRepository.getLastGame(savedUser.getId());
 
         Assertions.assertNull(previousGame);
         Assertions.assertNotNull(currentGame);
@@ -65,7 +65,7 @@ public class GameServiceTest {
     public void stepFirst() {
         service.step(savedUser, StepValues.PAPER);
 
-        Game lastGame = gameRepository.getLastGame(savedUser);
+        Game lastGame = gameRepository.getLastGame(savedUser.getId());
         Assertions.assertEquals(lastGame.getUser_step_1(), StepValues.PAPER);
         Assertions.assertNotNull(lastGame.getGame_step_1());
     }
@@ -75,7 +75,7 @@ public class GameServiceTest {
     public void stepSecond() {
         service.step(savedUser, StepValues.SCISSORS);
 
-        Game lastGame = gameRepository.getLastGame(savedUser);
+        Game lastGame = gameRepository.getLastGame(savedUser.getId());
         Assertions.assertEquals(lastGame.getUser_step_2(), StepValues.SCISSORS);
         Assertions.assertNotNull(lastGame.getGame_step_2());
     }
@@ -85,7 +85,7 @@ public class GameServiceTest {
     public void stepThird() {
         service.step(savedUser, StepValues.STONE);
 
-        Game lastGame = gameRepository.getLastGame(savedUser);
+        Game lastGame = gameRepository.getLastGame(savedUser.getId());
         Assertions.assertEquals(lastGame.getUser_step_3(), StepValues.STONE);
         Assertions.assertNotNull(lastGame.getGame_step_3());
     }

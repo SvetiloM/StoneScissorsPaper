@@ -5,8 +5,8 @@ public interface SspClient {
 
     void signIn(Command command, String login, String password);
 
-    void start(Command command, String login);
+    void start(Command command);
 
-    void step(Command command, String login, StepValues step);
+    void step(Command command, StepValues step);
 
 }

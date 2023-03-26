@@ -18,7 +18,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void createGame(User user) {
-        Game lastGame = repository.getLastGame(user);
+        Game lastGame = repository.getLastGame(user.getId());
         if (lastGame == null) {
             Game game = new Game();
             game.setUser(user);
@@ -28,7 +28,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void step(User user, StepValues step) {
-        Game lastGame = repository.getLastGame(user);
+        Game lastGame = repository.getLastGame(user.getId());
         if (lastGame.getGame_step_1() == null) {
             repository.setStep1(lastGame.getId(), getRandomValue(), step);
         } else if (lastGame.getGame_step_2() == null) {
