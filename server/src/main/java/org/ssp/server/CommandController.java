@@ -1,11 +1,13 @@
-package org.ssp.services;
+package org.ssp.server;
 
 import org.ssp.Command;
+import org.ssp.ResultValues;
 
 public interface CommandController {
 
-    void execute(Command command, String token, String[] args);
+    ResultValues execute(Command command, String token, String[] args);
 
     String signIn(String login, String password);
+
     void signUp(String login, String password);
 }

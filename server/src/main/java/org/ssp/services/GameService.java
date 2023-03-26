@@ -1,15 +1,15 @@
 package org.ssp.services;
 
+import org.ssp.ResultValues;
 import org.ssp.StepValues;
-import org.ssp.repository.entity.Game;
 import org.ssp.repository.entity.User;
 
 public interface GameService {
 
     void createGame(User user);
 
-    void step(User userId, StepValues step);
+    ResultValues step(User user, StepValues step);
 
-    void countResult(Game game);
+    ResultValues getGameResult(Integer gameId);
 
 }

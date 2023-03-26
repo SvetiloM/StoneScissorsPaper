@@ -1,14 +1,14 @@
-package org.ssp;
+package org.ssp.server;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ssp.services.CommandController;
+import org.ssp.Network;
+import org.ssp.ResultValues;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @Component
 public class SspServer {
@@ -30,15 +30,18 @@ public class SspServer {
             public void received(Connection c, Object object) {
                 if (object instanceof Network.Args) {
                     Network.Args args = (Network.Args) object;
-                    commandController.execute(args.command, args.login, args.args);
+                    ResultValues resultValue = commandController.execute(args.command, args.login, args.args);
+                    if (resultValue!=null) {
+                        Network.Result result = new Network.Result();
+                        result.result = resultValue;
+                        c.sendTCP(result);
+                    }
                 } else if (object instanceof Network.Authorisation) {
                     Network.Authorisation auth = (Network.Authorisation) object;
-                    System.out.println("запрос на авторизацию");
                     String token = commandController.signIn(auth.login, auth.password);
                     Network.AuthorisationToken authToken = new Network.AuthorisationToken();
                     authToken.token = token;
                     c.sendTCP(authToken);
-                    System.out.println("отправлен токен: " + token);
                 } else if (object instanceof Network.Registration) {
                     Network.Registration registration = (Network.Registration) object;
                     commandController.signUp(registration.login, registration.password);

@@ -8,6 +8,7 @@ import org.ssp.repository.GameRepository;
 import org.ssp.repository.entity.Game;
 import org.ssp.repository.entity.User;
 
+import java.util.Optional;
 import java.util.Random;
 
 @Component
@@ -26,25 +27,42 @@ public class GameServiceImpl implements GameService {
         }
     }
 
+
+    //todo optional
     @Override
-    public void step(User user, StepValues step) {
+    public ResultValues step(User user, StepValues step) {
         Game lastGame = repository.getLastGame(user.getId());
         if (lastGame.getGame_step_1() == null) {
             repository.setStep1(lastGame.getId(), getRandomValue(), step);
+            return null;
         } else if (lastGame.getGame_step_2() == null) {
             repository.setStep2(lastGame.getId(), getRandomValue(), step);
+            return null;
         } else if (lastGame.getGame_step_3() == null) {
             repository.setStep3(lastGame.getId(), getRandomValue(), step);
+            countResult(lastGame.getId());
         }
+        return getGameResult(lastGame.getId());
+    }
+
+    @Override
+    public ResultValues getGameResult(Integer gameId) {
+        //todo
+        Game lastGame = repository.findById(gameId).get();
+        return lastGame.getResult();
     }
 
     private StepValues getRandomValue() {
         Random random = new Random();
-        int i = random.ints(1, StepValues.values().length).findFirst().getAsInt();
+        int i = random.ints(0, StepValues.values().length).findFirst().getAsInt();
         return StepValues.values()[i];
     }
 
-    public void countResult(Game game) {
+    private void countResult(Integer gameId) {
+        Optional<Game> gameOptional = repository.findById(gameId);
+        //todo
+        Game game = gameOptional.get();
+
         byte result = 0;
 
         result += compareSteps(game.getGame_step_1(), game.getUser_step_1());

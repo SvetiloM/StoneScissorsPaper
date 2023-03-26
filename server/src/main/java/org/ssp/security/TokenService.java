@@ -1,4 +1,4 @@
-package org.ssp;
+package org.ssp.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

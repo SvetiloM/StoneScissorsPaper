@@ -15,6 +15,8 @@ public class Network {
         kryo.register(Authorisation.class);
         kryo.register(AuthorisationToken.class);
         kryo.register(Registration.class);
+        kryo.register(ResultValues.class);
+        kryo.register(Result.class);
     }
 
     public static class Args {
@@ -35,6 +37,10 @@ public class Network {
     public static class Registration {
         public String login;
         public String password;
+    }
+
+    public static class Result {
+        public ResultValues result;
     }
 
 }

@@ -1,11 +1,14 @@
-package org.ssp.services;
+package org.ssp.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ssp.Command;
+import org.ssp.ResultValues;
 import org.ssp.StepValues;
-import org.ssp.TokenService;
+import org.ssp.security.TokenService;
 import org.ssp.repository.entity.User;
+import org.ssp.services.GameService;
+import org.ssp.services.UserService;
 
 @Component
 public class CommandControllerImpl implements CommandController {
@@ -19,7 +22,7 @@ public class CommandControllerImpl implements CommandController {
     private TokenService tokenService;
 
     @Override
-    public void execute(Command command, String login, String[] args) {
+    public ResultValues execute(Command command, String login, String[] args) {
         if (tokenService.validateToken(login));
         switch (command) {
             case START -> {
@@ -28,17 +31,18 @@ public class CommandControllerImpl implements CommandController {
             }
             case ROCK -> {
                 User user = userService.getUser(tokenService.getLoginFromToken(login));
-                gameService.step(user, StepValues.STONE);
+                return gameService.step(user, StepValues.STONE);
             }
             case PAPER -> {
                 User user = userService.getUser(tokenService.getLoginFromToken(login));
-                gameService.step(user, StepValues.PAPER);
+                return gameService.step(user, StepValues.PAPER);
             }
             case SCISSORS -> {
                 User user = userService.getUser(tokenService.getLoginFromToken(login));
-                gameService.step(user, StepValues.SCISSORS);
+                return gameService.step(user, StepValues.SCISSORS);
             }
         }
+        return null;
     }
 
     @Override

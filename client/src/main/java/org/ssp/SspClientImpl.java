@@ -20,6 +20,9 @@ public class SspClientImpl implements SspClient {
                 if (object instanceof Network.AuthorisationToken) {
                     Network.AuthorisationToken authToken = (Network.AuthorisationToken) object;
                     token = authToken.token;
+                } else if (object instanceof Network.Result) {
+                    Network.Result result = (Network.Result) object;
+                    System.out.println(result.result);
                 }
             }
         });
