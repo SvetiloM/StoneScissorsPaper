@@ -1,4 +1,4 @@
-package org.ssp.server;
+package org.ssp.controller;
 
 import org.ssp.Command;
 import org.ssp.ResultValues;

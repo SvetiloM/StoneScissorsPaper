@@ -1,4 +1,4 @@
-package org.ssp.server;
+package org.ssp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
