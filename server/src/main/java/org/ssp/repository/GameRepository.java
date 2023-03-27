@@ -7,7 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.ssp.ResultValues;
 import org.ssp.StepValues;
 import org.ssp.repository.entity.Game;
-import org.ssp.repository.entity.User;
 
 import java.util.Optional;
 
