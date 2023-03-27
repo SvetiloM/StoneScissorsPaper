@@ -3,13 +3,15 @@ package org.ssp.controller;
 import org.ssp.Command;
 import org.ssp.ResultValue;
 
+import java.util.Optional;
+
 public interface CommandController {
 
-    ResultValue execute(Command command, String token);
+    Optional<ResultValue> execute(Command command, String token);
 
     String signIn(String login, char[] password);
 
     void signUp(String login, char[] password);
 
-    ResultValue lose(String token);
+    Optional<ResultValue> lose(String token);
 }

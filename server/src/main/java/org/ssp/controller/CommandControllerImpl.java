@@ -10,6 +10,8 @@ import org.ssp.security.TokenService;
 import org.ssp.services.GameService;
 import org.ssp.services.UserService;
 
+import java.util.Optional;
+
 @Controller
 @RequiredArgsConstructor
 public class CommandControllerImpl implements CommandController {
@@ -19,7 +21,7 @@ public class CommandControllerImpl implements CommandController {
     private final TokenService tokenService;
 
     @Override
-    public ResultValue execute(Command command, String token) {
+    public Optional<ResultValue> execute(Command command, String token) {
         tokenService.validateToken(token);
         switch (command) {
             case START -> {
@@ -39,7 +41,7 @@ public class CommandControllerImpl implements CommandController {
                 return gameService.step(user, StepValues.SCISSORS);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
@@ -54,7 +56,7 @@ public class CommandControllerImpl implements CommandController {
     }
 
     @Override
-    public ResultValue lose(String token) {
+    public Optional<ResultValue> lose(String token) {
         User user = userService.getUser(tokenService.getLoginFromToken(token));
         return gameService.step(user, StepValues.LOSE);
     }

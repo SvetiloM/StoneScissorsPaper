@@ -32,20 +32,20 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public ResultValue step(User user, StepValues step) {
+    public Optional<ResultValue> step(User user, StepValues step) {
         Game lastGame = repository.getLastGame(user.getId())
                 .orElseThrow(() -> new SspRepositoryException(Ssp_2, user.getLogin()));
         if (lastGame.getGame_step_1() == null) {
             repository.setStep1(lastGame.getId(), getRandomValue(), step);
-            return null;
+            return Optional.empty();
         } else if (lastGame.getGame_step_2() == null) {
             repository.setStep2(lastGame.getId(), getRandomValue(), step);
-            return null;
+            return Optional.empty();
         } else if (lastGame.getGame_step_3() == null) {
             repository.setStep3(lastGame.getId(), getRandomValue(), step);
             countResult(lastGame.getId());
         }
-        return getGameResult(lastGame.getId());
+        return Optional.of(getGameResult(lastGame.getId()));
     }
 
     @Override

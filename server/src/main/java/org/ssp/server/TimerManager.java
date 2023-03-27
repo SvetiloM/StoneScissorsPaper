@@ -8,7 +8,6 @@ import java.util.function.Consumer;
 @Component
 public class TimerManager {
 
-    //todo lose
     private final Map<Integer, ExecutableRecursiveTimer> timers = new HashMap<>();
 
     public void start(Consumer<Integer> consumer, Runnable lose, int id) {

@@ -41,8 +41,8 @@ public class SspServerListener extends Listener {
     private void step(Network.Step step, Connection connection) {
         CompletableFuture.supplyAsync(() -> commandController.execute(step.command, step.token), cachedExecutor)
                 .thenAcceptAsync(resultValue -> {
-                    if (resultValue != null) {
-                        sendResult(resultValue, connection);
+                    if (resultValue.isPresent()) {
+                        sendResult(resultValue.get(), connection);
                         timerManager.stop(connection.getID());
                     } else {
                         startLoseTimer(step.token, connection);
@@ -82,8 +82,8 @@ public class SspServerListener extends Listener {
     private void loseStep(String token, Connection connection) {
         CompletableFuture.supplyAsync(() -> commandController.lose(token), cachedExecutor)
                 .thenAcceptAsync(resultValue -> {
-                    if (resultValue != null) {
-                        sendResult(resultValue, connection);
+                    if (resultValue.isPresent()) {
+                        sendResult(resultValue.get(), connection);
                         timerManager.stop(connection.getID());
                     } else {
                         sendLoseMessage(connection);

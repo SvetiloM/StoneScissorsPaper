@@ -14,6 +14,7 @@ import org.ssp.repository.entity.Game;
 import org.ssp.repository.entity.User;
 
 import java.util.Calendar;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @SpringBootTest
@@ -114,9 +115,10 @@ public class GameServiceTest {
         game.setUser(savedUser);
         gameRepository.save(game);
 
-//        service.countResult(game);
+        Optional<ResultValue> result = service.step(savedUser, StepValues.PAPER);
 
-//        Assertions.assertEquals(expected, gameRepository.findById(game.getId()).get().getResult());
+        Assertions.assertTrue(result.isPresent());
+        Assertions.assertEquals(expected, result.get());
     }
 
     private static Game buildGame(StepValues game1, StepValues user1,
