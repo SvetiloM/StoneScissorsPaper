@@ -9,7 +9,7 @@ public class TimerManager {
 
     private final HashMap<Integer, ExecutableRecursiveTimer> timers = new HashMap<>();
 
-    public void start(Consumer<Byte> consumer, int id) {
+    public void start(Consumer<Integer> consumer, int id) {
         ExecutableRecursiveTimer oldTimer = timers.get(id);
         if (oldTimer != null) {
             oldTimer.cancel();

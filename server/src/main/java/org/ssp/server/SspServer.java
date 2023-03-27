@@ -47,7 +47,7 @@ public class SspServer {
                                     c.sendTCP(result);
                                     timerManager.stop(c.getID());
                                 } else {
-                                    Consumer<Byte> sendTime = (sec) -> {
+                                    Consumer<Integer> sendTime = (sec) -> {
                                         Network.Time time = new Network.Time();
                                         time.sec = sec;
                                         c.sendTCP(time);

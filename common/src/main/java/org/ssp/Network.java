@@ -17,7 +17,7 @@ public class Network {
         kryo.register(ResultValues.class);
         kryo.register(Result.class);
         kryo.register(Time.class);
-        kryo.register(byte.class);
+        kryo.register(int.class);
     }
 
     public static class Step {
@@ -44,7 +44,7 @@ public class Network {
     }
 
     public static class Time {
-        public byte sec;
+        public int sec;
     }
 
 }
