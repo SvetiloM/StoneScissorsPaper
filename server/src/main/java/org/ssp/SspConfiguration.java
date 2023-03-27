@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class SspConfiguration {
 
-    @Value("${ssp.timer.maximumPoolSize}:100")
+    @Value("${ssp.timer.maximumPoolSize:100}")
     private Integer maxPoolSize;
 
     @Bean

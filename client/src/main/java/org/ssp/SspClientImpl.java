@@ -26,6 +26,8 @@ public class SspClientImpl implements SspClient {
                 } else if (object instanceof Network.Time) {
                     Network.Time time = (Network.Time) object;
                     System.out.println("осталось " + time.sec + " секунд");
+                } else if (object instanceof Network.LoseStep) {
+                    System.out.println("Вы проиграли этот раунд");
                 }
             }
         });

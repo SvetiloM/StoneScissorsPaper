@@ -10,4 +10,6 @@ public interface CommandController {
     String signIn(String login, char[] password);
 
     void signUp(String login, char[] password);
+
+    ResultValue lose(String token);
 }

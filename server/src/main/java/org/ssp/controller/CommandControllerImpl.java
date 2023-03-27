@@ -19,23 +19,23 @@ public class CommandControllerImpl implements CommandController {
     private final TokenService tokenService;
 
     @Override
-    public ResultValue execute(Command command, String login) {
-        tokenService.validateToken(login);
+    public ResultValue execute(Command command, String token) {
+        tokenService.validateToken(token);
         switch (command) {
             case START -> {
-                User user = userService.getUser(tokenService.getLoginFromToken(login));
+                User user = userService.getUser(tokenService.getLoginFromToken(token));
                 gameService.createGame(user);
             }
             case ROCK -> {
-                User user = userService.getUser(tokenService.getLoginFromToken(login));
+                User user = userService.getUser(tokenService.getLoginFromToken(token));
                 return gameService.step(user, StepValues.STONE);
             }
             case PAPER -> {
-                User user = userService.getUser(tokenService.getLoginFromToken(login));
+                User user = userService.getUser(tokenService.getLoginFromToken(token));
                 return gameService.step(user, StepValues.PAPER);
             }
             case SCISSORS -> {
-                User user = userService.getUser(tokenService.getLoginFromToken(login));
+                User user = userService.getUser(tokenService.getLoginFromToken(token));
                 return gameService.step(user, StepValues.SCISSORS);
             }
         }
@@ -51,6 +51,12 @@ public class CommandControllerImpl implements CommandController {
     @Override
     public void signUp(String login, char[] password) {
         userService.signUp(login, password);
+    }
+
+    @Override
+    public ResultValue lose(String token) {
+        User user = userService.getUser(tokenService.getLoginFromToken(token));
+        return gameService.step(user, StepValues.LOSE);
     }
 
 }

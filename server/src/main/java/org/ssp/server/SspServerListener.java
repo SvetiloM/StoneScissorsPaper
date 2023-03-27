@@ -45,10 +45,7 @@ public class SspServerListener extends Listener {
                         sendResult(resultValue, connection);
                         timerManager.stop(connection.getID());
                     } else {
-                        Consumer<Integer> sendTime = (sec) -> {
-                            sendTime(sec, connection);
-                        };
-                        timerManager.start(sendTime, connection.getID());
+                        startLoseTimer(step.token, connection);
                     }
                 });
     }
@@ -80,5 +77,32 @@ public class SspServerListener extends Listener {
 
     private void registration(Network.Registration registration) {
         cachedExecutor.execute(() -> commandController.signUp(registration.login, registration.password));
+    }
+
+    private void loseStep(String token, Connection connection) {
+        CompletableFuture.supplyAsync(() -> commandController.lose(token), cachedExecutor)
+                .thenAcceptAsync(resultValue -> {
+                    if (resultValue != null) {
+                        sendResult(resultValue, connection);
+                        timerManager.stop(connection.getID());
+                    } else {
+                        sendLoseMessage(connection);
+                        startLoseTimer(token, connection);
+                    }
+                });
+    }
+
+    private void sendLoseMessage(Connection connection) {
+        connection.sendTCP(new Network.LoseStep());
+    }
+
+    private void startLoseTimer(String token, Connection connection) {
+        Consumer<Integer> sendTime = (sec) -> {
+            sendTime(sec, connection);
+        };
+        Runnable lose = () -> {
+            loseStep(token, connection);
+        };
+        timerManager.start(sendTime, lose, connection.getID());
     }
 }

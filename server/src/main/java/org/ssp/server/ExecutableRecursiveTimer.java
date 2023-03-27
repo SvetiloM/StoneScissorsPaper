@@ -7,12 +7,14 @@ import java.util.function.Consumer;
 public final class ExecutableRecursiveTimer extends Timer {
 
     private final Consumer<Integer> consumer;
+    private final Runnable lose;
 
     private final int[] delays = {0, 15, 5, 5, 2, 1};
     private final int[] sec = {30, 15, 10, 5, 3, 1};
 
-    public ExecutableRecursiveTimer(Consumer<Integer> consumer) {
+    public ExecutableRecursiveTimer(Consumer<Integer> consumer, Runnable lose) {
         this.consumer = consumer;
+        this.lose = lose;
     }
 
     public void start() {
@@ -31,6 +33,14 @@ public final class ExecutableRecursiveTimer extends Timer {
                 }
             };
             schedule(task, delays[i] * 1000);
+        } else {
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    lose.run();
+                }
+            };
+            schedule(task, 1000);
         }
     }
 }

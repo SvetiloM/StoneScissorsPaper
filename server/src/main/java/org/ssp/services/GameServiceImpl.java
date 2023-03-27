@@ -83,26 +83,26 @@ public class GameServiceImpl implements GameService {
     }
 
     private byte compareSteps(StepValues game, StepValues user) {
-        byte result = 0;
+        if (user.equals(StepValues.LOSE)) return -1;
         if (game.equals(StepValues.PAPER) &&
                 user.equals(StepValues.STONE)) {
-            result--;
+            return -1;
         } else if (game.equals(StepValues.SCISSORS) &&
                 user.equals(StepValues.PAPER)) {
-            result--;
+            return -1;
         } else if (game.equals(StepValues.STONE) &&
                 user.equals(StepValues.SCISSORS)) {
-            result--;
+            return -1;
         } else if (game.equals(StepValues.PAPER) &&
                 user.equals(StepValues.SCISSORS)) {
-            result++;
+            return 1;
         } else if (game.equals(StepValues.SCISSORS) &&
                 user.equals(StepValues.STONE)) {
-            result++;
+            return 1;
         } else if (game.equals(StepValues.STONE) &&
                 user.equals(StepValues.PAPER)) {
-            result++;
+            return 1;
         }
-        return result;
+        return 0;
     }
 }

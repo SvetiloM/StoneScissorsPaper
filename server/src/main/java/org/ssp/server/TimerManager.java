@@ -11,13 +11,13 @@ public class TimerManager {
     //todo lose
     private final Map<Integer, ExecutableRecursiveTimer> timers = new HashMap<>();
 
-    public void start(Consumer<Integer> consumer, int id) {
+    public void start(Consumer<Integer> consumer, Runnable lose, int id) {
         ExecutableRecursiveTimer oldTimer = timers.get(id);
         if (oldTimer != null) {
             oldTimer.cancel();
             timers.remove(id);
         }
-        ExecutableRecursiveTimer timer = new ExecutableRecursiveTimer(consumer);
+        ExecutableRecursiveTimer timer = new ExecutableRecursiveTimer(consumer, lose);
         timer.start();
         timers.put(id, timer);
     }
