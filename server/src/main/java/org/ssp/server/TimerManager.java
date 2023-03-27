@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 public class TimerManager {
 
     private final Map<Integer, ExecutableRecursiveTimer> timers = new HashMap<>();
+    private final int[] sec = {30, 15, 10, 5, 3, 1};
 
     public void start(Consumer<Integer> consumer, Runnable lose, int id) {
         ExecutableRecursiveTimer oldTimer = timers.get(id);
@@ -16,7 +17,7 @@ public class TimerManager {
             oldTimer.cancel();
             timers.remove(id);
         }
-        ExecutableRecursiveTimer timer = new ExecutableRecursiveTimer(consumer, lose);
+        ExecutableRecursiveTimer timer = new ExecutableRecursiveTimer(consumer, lose, sec);
         timer.start();
         timers.put(id, timer);
     }

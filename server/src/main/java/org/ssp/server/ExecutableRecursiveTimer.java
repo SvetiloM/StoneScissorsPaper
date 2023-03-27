@@ -9,12 +9,12 @@ public final class ExecutableRecursiveTimer extends Timer {
     private final Consumer<Integer> consumer;
     private final Runnable lose;
 
-    private final int[] delays = {0, 15, 5, 5, 2, 1};
-    private final int[] sec = {30, 15, 10, 5, 3, 1};
+    private final int[] sec;
 
-    public ExecutableRecursiveTimer(Consumer<Integer> consumer, Runnable lose) {
+    public ExecutableRecursiveTimer(Consumer<Integer> consumer, Runnable lose, int[] sec) {
         this.consumer = consumer;
         this.lose = lose;
+        this.sec = sec;
     }
 
     public void start() {
@@ -24,7 +24,7 @@ public final class ExecutableRecursiveTimer extends Timer {
     }
 
     private void schedule(int i) {
-        if (i < delays.length) {
+        if (i < sec.length) {
             TimerTask task = new TimerTask() {
                 @Override
                 public void run() {
@@ -32,7 +32,7 @@ public final class ExecutableRecursiveTimer extends Timer {
                     schedule(i + 1);
                 }
             };
-            schedule(task, delays[i] * 1000);
+            schedule(task, getDelay(i));
         } else {
             TimerTask task = new TimerTask() {
                 @Override
@@ -42,5 +42,9 @@ public final class ExecutableRecursiveTimer extends Timer {
             };
             schedule(task, 1000);
         }
+    }
+
+    private int getDelay(int i) {
+        return 1000 * (sec[i - 1] - sec[i]);
     }
 }
