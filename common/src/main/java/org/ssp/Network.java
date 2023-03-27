@@ -2,7 +2,6 @@ package org.ssp;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-import org.springframework.beans.factory.annotation.Value;
 
 public class Network {
     static public final int port = 54555;
