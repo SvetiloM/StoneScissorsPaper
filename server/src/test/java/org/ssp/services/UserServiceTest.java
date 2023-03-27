@@ -32,7 +32,7 @@ public class UserServiceTest {
         Assertions.assertTrue(repository.selectByLogin(login).isPresent());
     }
 
-    @Test()
+    @Test
     public void SignUpFail() {
         String login = "loginFail";
         char[] password = "passwordFail".toCharArray();

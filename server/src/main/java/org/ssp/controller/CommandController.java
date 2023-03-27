@@ -1,11 +1,11 @@
 package org.ssp.controller;
 
 import org.ssp.Command;
-import org.ssp.ResultValues;
+import org.ssp.ResultValue;
 
 public interface CommandController {
 
-    ResultValues execute(Command command, String token);
+    ResultValue execute(Command command, String token);
 
     String signIn(String login, char[] password);
 

@@ -1,7 +1,7 @@
 package org.ssp.repository.entity;
 
 import jakarta.persistence.*;
-import org.ssp.ResultValues;
+import org.ssp.ResultValue;
 import org.ssp.StepValues;
 
 @Entity
@@ -19,7 +19,7 @@ public class Game {
     private StepValues user_step_2;
     private StepValues game_step_3;
     private StepValues user_step_3;
-    private ResultValues result;
+    private ResultValue result;
 
     public User getUser() {
         return user;
@@ -77,11 +77,11 @@ public class Game {
         this.user_step_3 = user_step_3;
     }
 
-    public ResultValues getResult() {
+    public ResultValue getResult() {
         return result;
     }
 
-    public void setResult(ResultValues result) {
+    public void setResult(ResultValue result) {
         this.result = result;
     }
 

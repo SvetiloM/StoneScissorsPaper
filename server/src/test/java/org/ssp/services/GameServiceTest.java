@@ -6,7 +6,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.ssp.ResultValues;
+import org.ssp.ResultValue;
 import org.ssp.StepValues;
 import org.ssp.repository.GameRepository;
 import org.ssp.repository.UserRepository;
@@ -92,25 +92,25 @@ public class GameServiceTest {
 
     public static Stream<Arguments> gameVariants() {
         return Stream.of(
-                Arguments.of(ResultValues.LOSE,
+                Arguments.of(ResultValue.LOSE,
                         buildGame(StepValues.STONE, StepValues.STONE,
-                                StepValues.SCISSORS,StepValues.PAPER,
+                                StepValues.SCISSORS, StepValues.PAPER,
                                 StepValues.PAPER, StepValues.STONE)),
-                Arguments.of(ResultValues.WIN,
+                Arguments.of(ResultValue.WIN,
                         buildGame(StepValues.SCISSORS, StepValues.SCISSORS,
                                 StepValues.PAPER, StepValues.SCISSORS,
                                 StepValues.STONE, StepValues.PAPER)),
-                Arguments.of(ResultValues.DRAW,
+                Arguments.of(ResultValue.DRAW,
                         buildGame(StepValues.PAPER, StepValues.PAPER,
-                        StepValues.STONE, StepValues.SCISSORS,
-                        StepValues.STONE, StepValues.PAPER))
+                                StepValues.STONE, StepValues.SCISSORS,
+                                StepValues.STONE, StepValues.PAPER))
         );
     }
 
     @ParameterizedTest
     @Order(5)
     @MethodSource("gameVariants")
-    public void setResult(ResultValues expected, Game game) {
+    public void setResult(ResultValue expected, Game game) {
         game.setUser(savedUser);
         gameRepository.save(game);
 

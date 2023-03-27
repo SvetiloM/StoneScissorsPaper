@@ -1,8 +1,8 @@
 package org.ssp.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.ssp.ResultValues;
+import org.springframework.stereotype.Service;
+import org.ssp.ResultValue;
 import org.ssp.StepValues;
 import org.ssp.exceptions.SspRepositoryException;
 import org.ssp.repository.GameRepository;
@@ -12,10 +12,10 @@ import org.ssp.repository.entity.User;
 import java.util.Optional;
 import java.util.Random;
 
-import static org.ssp.exceptions.SspException.Ssp_2;
 import static org.ssp.exceptions.SspException.Ssp_1;
+import static org.ssp.exceptions.SspException.Ssp_2;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class GameServiceImpl implements GameService {
 
@@ -32,7 +32,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public ResultValues step(User user, StepValues step) {
+    public ResultValue step(User user, StepValues step) {
         Game lastGame = repository.getLastGame(user.getId())
                 .orElseThrow(() -> new SspRepositoryException(Ssp_2, user.getLogin()));
         if (lastGame.getGame_step_1() == null) {
@@ -49,7 +49,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public ResultValues getGameResult(Integer gameId) {
+    public ResultValue getGameResult(Integer gameId) {
         Game lastGame = repository.findById(gameId)
                 .orElseThrow(() -> new SspRepositoryException(Ssp_1, gameId));
         return lastGame.getResult();
@@ -74,11 +74,11 @@ public class GameServiceImpl implements GameService {
         result += compareSteps(game.getGame_step_3(), game.getUser_step_3());
 
         if (result < 0) {
-            repository.setResult(game.getId(), ResultValues.LOSE);
+            repository.setResult(game.getId(), ResultValue.LOSE);
         } else if (result > 0) {
-            repository.setResult(game.getId(), ResultValues.WIN);
+            repository.setResult(game.getId(), ResultValue.WIN);
         } else {
-            repository.setResult(game.getId(), ResultValues.DRAW);
+            repository.setResult(game.getId(), ResultValue.DRAW);
         }
     }
 

@@ -14,7 +14,7 @@ public class Network {
         kryo.register(Authorisation.class);
         kryo.register(AuthorisationToken.class);
         kryo.register(Registration.class);
-        kryo.register(ResultValues.class);
+        kryo.register(ResultValue.class);
         kryo.register(Result.class);
         kryo.register(Time.class);
         kryo.register(int.class);
@@ -40,7 +40,7 @@ public class Network {
     }
 
     public static class Result {
-        public ResultValues result;
+        public ResultValue result;
     }
 
     public static class Time {

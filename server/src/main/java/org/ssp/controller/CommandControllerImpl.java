@@ -3,15 +3,15 @@ package org.ssp.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.ssp.Command;
-import org.ssp.ResultValues;
+import org.ssp.ResultValue;
 import org.ssp.StepValues;
-import org.ssp.security.TokenService;
 import org.ssp.repository.entity.User;
+import org.ssp.security.TokenService;
 import org.ssp.services.GameService;
 import org.ssp.services.UserService;
 
-@RequiredArgsConstructor
 @Controller
+@RequiredArgsConstructor
 public class CommandControllerImpl implements CommandController {
 
     private final GameService gameService;
@@ -19,7 +19,7 @@ public class CommandControllerImpl implements CommandController {
     private final TokenService tokenService;
 
     @Override
-    public ResultValues execute(Command command, String login) {
+    public ResultValue execute(Command command, String login) {
         tokenService.validateToken(login);
         switch (command) {
             case START -> {

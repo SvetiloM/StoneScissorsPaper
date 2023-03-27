@@ -1,6 +1,8 @@
 package org.ssp.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.stereotype.Component;
 import org.ssp.exceptions.SspRepositoryException;
 import org.ssp.repository.UserRepository;
@@ -11,6 +13,7 @@ import java.util.Calendar;
 import static org.ssp.exceptions.SspException.Ssp_3;
 import static org.ssp.exceptions.SspException.Ssp_4;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {

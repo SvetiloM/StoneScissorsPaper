@@ -1,6 +1,6 @@
 package org.ssp;
 
-public enum ResultValues {
+public enum ResultValue {
 
     WIN,
     LOSE,
