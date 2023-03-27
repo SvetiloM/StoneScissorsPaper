@@ -12,7 +12,6 @@ import java.util.Date;
 @Component
 public class TokenService {
 
-    //todo send to file
     private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public String generateToken(String login) {

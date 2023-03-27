@@ -59,9 +59,13 @@ public class SspServer {
                     Network.Authorisation auth = (Network.Authorisation) object;
                     CompletableFuture.supplyAsync(() -> commandController.signIn(auth.login, auth.password), cachedExecutor)
                             .thenAcceptAsync(token -> {
-                                Network.AuthorisationToken authToken = new Network.AuthorisationToken();
-                                authToken.token = token;
-                                c.sendTCP(authToken);
+                                if (token != null) {
+                                    Network.AuthorisationToken authToken = new Network.AuthorisationToken();
+                                    authToken.token = token;
+                                    c.sendTCP(authToken);
+
+                                    timerManager.stop(c.getID());
+                                }
                             });
                 } else if (object instanceof Network.Registration) {
                     Network.Registration registration = (Network.Registration) object;
