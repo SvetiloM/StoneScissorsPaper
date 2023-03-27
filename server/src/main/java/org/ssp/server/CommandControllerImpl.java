@@ -23,7 +23,7 @@ public class CommandControllerImpl implements CommandController {
 
     @Override
     public ResultValues execute(Command command, String login) {
-        if (tokenService.validateToken(login));
+        tokenService.validateToken(login);
         switch (command) {
             case START -> {
                 User user = userService.getUser(tokenService.getLoginFromToken(login));

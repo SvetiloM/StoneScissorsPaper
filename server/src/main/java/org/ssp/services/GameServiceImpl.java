@@ -4,12 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ssp.ResultValues;
 import org.ssp.StepValues;
+import org.ssp.exceptions.SspException;
+import org.ssp.exceptions.SspRepositoryException;
 import org.ssp.repository.GameRepository;
 import org.ssp.repository.entity.Game;
 import org.ssp.repository.entity.User;
 
 import java.util.Optional;
 import java.util.Random;
+
+import static org.ssp.exceptions.SspException.Ssp_2;
+import static org.ssp.exceptions.SspException.Ssp_1;
 
 @Component
 public class GameServiceImpl implements GameService {
@@ -19,19 +24,18 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void createGame(User user) {
-        Game lastGame = repository.getLastGame(user.getId());
-        if (lastGame == null) {
+        Optional<Game> optional = repository.getLastGame(user.getId());
+        if (optional.isEmpty()) {
             Game game = new Game();
             game.setUser(user);
             repository.save(game);
         }
     }
 
-
-    //todo optional
     @Override
     public ResultValues step(User user, StepValues step) {
-        Game lastGame = repository.getLastGame(user.getId());
+        Game lastGame = repository.getLastGame(user.getId())
+                .orElseThrow(() -> new SspRepositoryException(Ssp_2, user.getLogin()));
         if (lastGame.getGame_step_1() == null) {
             repository.setStep1(lastGame.getId(), getRandomValue(), step);
             return null;
@@ -47,8 +51,8 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public ResultValues getGameResult(Integer gameId) {
-        //todo
-        Game lastGame = repository.findById(gameId).get();
+        Game lastGame = repository.findById(gameId)
+                .orElseThrow(() -> new SspRepositoryException(Ssp_1, gameId));
         return lastGame.getResult();
     }
 
@@ -60,8 +64,9 @@ public class GameServiceImpl implements GameService {
 
     private void countResult(Integer gameId) {
         Optional<Game> gameOptional = repository.findById(gameId);
-        //todo
-        Game game = gameOptional.get();
+
+        Game game = gameOptional
+                .orElseThrow(() -> new SspRepositoryException(Ssp_1, gameId));
 
         byte result = 0;
 

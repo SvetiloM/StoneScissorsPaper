@@ -9,10 +9,12 @@ import org.ssp.StepValues;
 import org.ssp.repository.entity.Game;
 import org.ssp.repository.entity.User;
 
+import java.util.Optional;
+
 public interface GameRepository extends CrudRepository<Game, Integer> {
 
     @Query("SELECT g from Game g where g.user.id=?1 and result=NULL")
-    Game getLastGame(Integer user);
+    Optional<Game> getLastGame(Integer user);
 
     @Transactional
     @Modifying

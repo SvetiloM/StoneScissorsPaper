@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 @Component
 public class TimerManager {
 
-    private HashMap<Integer, ExecutableRecursiveTimer> timers = new HashMap();
+    private final HashMap<Integer, ExecutableRecursiveTimer> timers = new HashMap<>();
 
     public void start(Consumer<Byte> consumer, int id) {
         ExecutableRecursiveTimer oldTimer = timers.get(id);

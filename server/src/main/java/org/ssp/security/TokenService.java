@@ -3,11 +3,15 @@ package org.ssp.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
+import org.ssp.exceptions.SspTokenException;
 
 import javax.crypto.SecretKey;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+
+import static org.ssp.exceptions.SspException.Ssp_5;
+import static org.ssp.exceptions.SspException.Ssp_6;
 
 @Component
 public class TokenService {
@@ -28,14 +32,17 @@ public class TokenService {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
-        } catch (ClaimJwtException expEx) {
-            //todo exception
+        } catch (ClaimJwtException ex) {
+            throw new SspTokenException(Ssp_5, ex);
         }
-        return false;
     }
 
     public String getLoginFromToken(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-        return claims.getSubject();
+        try {
+            Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+            return claims.getSubject();
+        } catch (ClaimJwtException ex) {
+            throw new SspTokenException(Ssp_6, ex);
+        }
     }
 }

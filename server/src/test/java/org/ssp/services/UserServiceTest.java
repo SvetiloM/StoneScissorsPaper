@@ -29,7 +29,7 @@ public class UserServiceTest {
 
         service.signUp(login, password);
 
-        Assertions.assertNotNull(repository.getPassword(login));
+        Assertions.assertTrue(repository.selectByLogin(login).isPresent());
     }
 
     @Test()

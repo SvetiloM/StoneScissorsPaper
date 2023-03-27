@@ -7,11 +7,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.ssp.repository.entity.User;
 
 import java.util.Date;
+import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, Integer> {
-
-    @Query("SELECT u.password from User u where u.login=?1")
-    Integer getPassword(String login);
 
     @Transactional
     @Modifying
@@ -19,6 +17,6 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     void updateUser(String login, Date authorisationDate);
 
     @Query("SELECT u from User u where u.login=?1")
-    User selectByLogin(String login);
+    Optional<User> selectByLogin(String login);
 
 }
