@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 @Component
 public class SspServer {
@@ -19,7 +20,11 @@ public class SspServer {
     @Autowired
     private CommandController commandController;
 
-    private ExecutorService cachedExecutor = Executors.newCachedThreadPool();
+    @Autowired
+    private TimerManager timerManager = new TimerManager();
+
+    private final ExecutorService cachedExecutor = Executors.newCachedThreadPool();
+
 
     public SspServer() throws IOException {
         this.server = new Server() {
@@ -32,15 +37,23 @@ public class SspServer {
 
         server.addListener(new Listener() {
             public void received(Connection c, Object object) {
-                if (object instanceof Network.Args) {
-                    Network.Args args = (Network.Args) object;
-                    CompletableFuture.supplyAsync(() -> commandController.execute(args.command, args.login, args.args), cachedExecutor)
+                if (object instanceof Network.Step) {
+                    Network.Step step = (Network.Step) object;
+                    CompletableFuture.supplyAsync(() -> commandController.execute(step.command, step.token), cachedExecutor)
                             .thenAcceptAsync(resultValue -> {
                                 if (resultValue != null) {
                                     Network.Result result = new Network.Result();
                                     result.result = resultValue;
                                     c.sendTCP(result);
+                                    timerManager.stop(c.getID());
                                 }
+                            }).thenRun(() -> {
+                                Consumer<Byte> sendTime = (sec) -> {
+                                    Network.Time time = new Network.Time();
+                                    time.sec = sec;
+                                    c.sendTCP(time);
+                                };
+                                timerManager.start(sendTime, c.getID());
                             });
                 } else if (object instanceof Network.Authorisation) {
                     Network.Authorisation auth = (Network.Authorisation) object;
@@ -52,8 +65,13 @@ public class SspServer {
                             });
                 } else if (object instanceof Network.Registration) {
                     Network.Registration registration = (Network.Registration) object;
-                    cachedExecutor.execute(()->commandController.signUp(registration.login, registration.password));
+                    cachedExecutor.execute(() -> commandController.signUp(registration.login, registration.password));
                 }
+            }
+
+            @Override
+            public void disconnected(Connection connection) {
+                timerManager.stop(connection.getID());
             }
         });
 

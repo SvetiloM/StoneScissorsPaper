@@ -5,7 +5,7 @@ import org.ssp.ResultValues;
 
 public interface CommandController {
 
-    ResultValues execute(Command command, String token, String[] args);
+    ResultValues execute(Command command, String token);
 
     String signIn(String login, String password);
 

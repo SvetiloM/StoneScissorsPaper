@@ -9,20 +9,20 @@ public class Network {
 
     static public void register(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
-        kryo.register(String[].class);
         kryo.register(Command.class);
-        kryo.register(Args.class);
+        kryo.register(Step.class);
         kryo.register(Authorisation.class);
         kryo.register(AuthorisationToken.class);
         kryo.register(Registration.class);
         kryo.register(ResultValues.class);
         kryo.register(Result.class);
+        kryo.register(Time.class);
+        kryo.register(byte.class);
     }
 
-    public static class Args {
+    public static class Step {
         public Command command;
-        public String login;
-        public String[] args;
+        public String token;
     }
 
     public static class Authorisation {
@@ -41,6 +41,10 @@ public class Network {
 
     public static class Result {
         public ResultValues result;
+    }
+
+    public static class Time {
+        public byte sec;
     }
 
 }

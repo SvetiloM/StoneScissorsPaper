@@ -23,6 +23,9 @@ public class SspClientImpl implements SspClient {
                 } else if (object instanceof Network.Result) {
                     Network.Result result = (Network.Result) object;
                     System.out.println(result.result);
+                } else if (object instanceof Network.Time) {
+                    Network.Time time = (Network.Time) object;
+                    System.out.println("осталось " + time.sec + " секунд");
                 }
             }
         });
@@ -59,19 +62,17 @@ public class SspClientImpl implements SspClient {
 
     @Override
     public void start(Command command) {
-        Network.Args args = new Network.Args();
-        args.command = command;
-        args.login = token;
-        args.args = new String[]{};
-        client.sendTCP(args);
+        Network.Step step = new Network.Step();
+        step.command = command;
+        step.token = token;
+        client.sendTCP(step);
     }
 
     @Override
     public void step(Command command, StepValues step) {
-        Network.Args args = new Network.Args();
+        Network.Step args = new Network.Step();
         args.command = command;
-        args.login = token;
-        args.args = new String[]{step.name()};
+        args.token = token;
         client.sendTCP(args);
     }
 }
