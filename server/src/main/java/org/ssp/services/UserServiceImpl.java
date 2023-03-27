@@ -15,26 +15,23 @@ public class UserServiceImpl implements UserService {
 
     //todo password as chars
     @Override
-    public void signUp(String login, String password) {
+    public void signUp(String login, char[] password) {
         User user = new User();
         user.setLogin(login);
         //todo: save as hash
-        user.setPassword(password);
+        user.setPassword(String.valueOf(password).hashCode());
         user.setRegistration_date(Calendar.getInstance().getTime());
-        //todo check unique
-        System.out.println("WTF???? " + login);
+        //todo add exceptions
         userRepository.save(user);
     }
 
     @Override
-    public void signIn(String login, String password) {
-        String savedPassword = userRepository.getPassword(login);
+    public void signIn(String login, char[] password) {
+        Integer savedPassword = userRepository.getPassword(login);
         //todo add Errors
         if (savedPassword != null) {
-            if (password.equals(savedPassword)) {
+            if (String.valueOf(password).hashCode() == savedPassword) {
                 userRepository.updateUser(login, Calendar.getInstance().getTime());
-                //todo add session
-                return;
             }
         }
     }

@@ -45,7 +45,7 @@ public class SspClientImpl implements SspClient {
     }
 
     @Override
-    public void signUp(Command command, String login, String password) {
+    public void signUp(Command command, String login, char[] password) {
         Network.Registration reg = new Network.Registration();
         reg.login = login;
         reg.password = password;
@@ -53,7 +53,7 @@ public class SspClientImpl implements SspClient {
     }
 
     @Override
-    public void signIn(Command command, String login, String password) {
+    public void signIn(Command command, String login, char[] password) {
         Network.Authorisation auth = new Network.Authorisation();
         auth.login = login;
         auth.password = password;

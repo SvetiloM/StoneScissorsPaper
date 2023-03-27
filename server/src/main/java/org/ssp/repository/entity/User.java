@@ -13,7 +13,7 @@ public class User {
     @Column(unique = true)
     private String login;
     @Column(nullable = false)
-    private String password;
+    private Integer password;
     private Date authorisation_date;
     @Column(nullable = false)
     private Date registration_date;
@@ -34,11 +34,11 @@ public class User {
         this.login = login;
     }
 
-    public String getPassword() {
+    public Integer getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(Integer password) {
         this.password = password;
     }
 

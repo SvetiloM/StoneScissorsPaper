@@ -11,7 +11,7 @@ import java.util.Date;
 public interface UserRepository extends CrudRepository<User, Integer> {
 
     @Query("SELECT u.password from User u where u.login=?1")
-    String getPassword(String login);
+    Integer getPassword(String login);
 
     @Transactional
     @Modifying

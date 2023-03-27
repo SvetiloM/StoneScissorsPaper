@@ -1,9 +1,9 @@
 package org.ssp;
 
 public interface SspClient {
-    void signUp(Command command, String login, String password);
+    void signUp(Command command, String login, char[] password);
 
-    void signIn(Command command, String login, String password);
+    void signIn(Command command, String login, char[] password);
 
     void start(Command command);
 

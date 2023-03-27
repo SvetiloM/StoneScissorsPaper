@@ -9,6 +9,7 @@ public class Network {
 
     static public void register(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
+        kryo.register(char[].class);
         kryo.register(Command.class);
         kryo.register(Step.class);
         kryo.register(Authorisation.class);
@@ -27,7 +28,7 @@ public class Network {
 
     public static class Authorisation {
         public String login;
-        public String password;
+        public char[] password;
     }
 
     public static class AuthorisationToken {
@@ -36,7 +37,7 @@ public class Network {
 
     public static class Registration {
         public String login;
-        public String password;
+        public char[] password;
     }
 
     public static class Result {

@@ -25,7 +25,7 @@ public class UserServiceTest {
     @Test
     public void SignUpSuccess() {
         String login = "loginSuccess";
-        String password = "passwordSuccess";
+        char[] password = "passwordSuccess".toCharArray();
 
         service.signUp(login, password);
 
@@ -35,7 +35,7 @@ public class UserServiceTest {
     @Test()
     public void SignUpFail() {
         String login = "loginFail";
-        String password = "passwordFail";
+        char[] password = "passwordFail".toCharArray();
         service.signUp(login, password);
 
         Assertions.assertThrows(DataIntegrityViolationException.class,
@@ -46,7 +46,7 @@ public class UserServiceTest {
     @Test
     public void SignInSuccess() {
         String login = "signInSuccess";
-        String password = "signInPassword";
+        char[] password = "signInPassword".toCharArray();
         service.signUp(login, password);
 
         service.signIn(login, password);
@@ -62,7 +62,7 @@ public class UserServiceTest {
     @Test
     public void getUserSuccess() {
         String login = "getUserSuccess";
-        String password = "getUserPassword";
+        char[] password = "getUserPassword".toCharArray();
         service.signUp(login, password);
         service.signIn(login, password);
 

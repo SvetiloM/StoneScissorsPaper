@@ -37,11 +37,11 @@ public class Main {
         switch (command) {
             case SIGNUP -> {
                 if (args.length == 2)
-                    client.signUp(command, args[0], args[1]);
+                    client.signUp(command, args[0], args[1].toCharArray());
             }
             case SIGNIN -> {
                 if (args.length == 2)
-                    client.signIn(command, args[0], args[1]);
+                    client.signIn(command, args[0], args[1].toCharArray());
             }
             case START -> {
                 client.start(command);

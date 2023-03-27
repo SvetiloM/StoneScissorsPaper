@@ -36,7 +36,7 @@ public class GameServiceTest {
     public void init() {
         User user = new User();
         user.setLogin("login");
-        user.setPassword("password");
+        user.setPassword("password".hashCode());
         user.setRegistration_date(Calendar.getInstance().getTime());
         savedUser = userRepository.save(user);
     }

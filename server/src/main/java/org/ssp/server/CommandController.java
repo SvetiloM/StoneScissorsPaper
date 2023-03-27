@@ -7,7 +7,7 @@ public interface CommandController {
 
     ResultValues execute(Command command, String token);
 
-    String signIn(String login, String password);
+    String signIn(String login, char[] password);
 
-    void signUp(String login, String password);
+    void signUp(String login, char[] password);
 }

@@ -46,13 +46,13 @@ public class CommandControllerImpl implements CommandController {
     }
 
     @Override
-    public String signIn(String login, String password) {
+    public String signIn(String login, char[] password) {
         userService.signIn(login, password);
         return tokenService.generateToken(login);
     }
 
     @Override
-    public void signUp(String login, String password) {
+    public void signUp(String login, char[] password) {
         userService.signUp(login, password);
     }
 
