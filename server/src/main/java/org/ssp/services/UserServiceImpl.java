@@ -35,9 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void signIn(String login, char[] password) {
-        Integer savedPassword = userRepository.selectByLogin(login)
-                .orElseThrow(() -> new SspRepositoryException(Ssp_4, login))
-                .getPassword();
+        Integer savedPassword = getUser(login).getPassword();
         if (String.valueOf(password).hashCode() == savedPassword) {
             userRepository.updateUser(login, Calendar.getInstance().getTime());
         }

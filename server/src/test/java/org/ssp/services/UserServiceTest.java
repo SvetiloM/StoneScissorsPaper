@@ -3,9 +3,13 @@ package org.ssp.services;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.ssp.exceptions.SspRepositoryException;
+import org.ssp.repository.GameRepository;
 import org.ssp.repository.UserRepository;
 import org.ssp.repository.entity.User;
+
+import static org.ssp.exceptions.SspException.Ssp_3;
+import static org.ssp.exceptions.SspException.Ssp_4;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -17,8 +21,13 @@ public class UserServiceTest {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private GameRepository gameRepository;
+
+    @BeforeAll
     @AfterAll
     public void clean() {
+        gameRepository.deleteAll();
         repository.deleteAll();
     }
 
@@ -38,11 +47,10 @@ public class UserServiceTest {
         char[] password = "passwordFail".toCharArray();
         service.signUp(login, password);
 
-        Assertions.assertThrows(DataIntegrityViolationException.class,
-                () -> service.signUp(login, password));
+        Assertions.assertThrows(SspRepositoryException.class,
+                () -> service.signUp(login, password), Ssp_3.getMessage());
     }
 
-    //todo add fail tests after adding exceptions
     @Test
     public void SignInSuccess() {
         String login = "signInSuccess";
@@ -62,11 +70,17 @@ public class UserServiceTest {
     @Test
     public void getUserSuccess() {
         String login = "getUserSuccess";
-        char[] password = "getUserPassword".toCharArray();
+        char[] password = "getUserSuccessPassword".toCharArray();
         service.signUp(login, password);
-        service.signIn(login, password);
 
         User user = service.getUser(login);
         Assertions.assertNotNull(user);
+    }
+
+    @Test
+    public void getUserFail() {
+        String login = "getUserFail";
+
+        Assertions.assertThrows(SspRepositoryException.class, () -> service.getUser(login), Ssp_4.getMessage());
     }
 }

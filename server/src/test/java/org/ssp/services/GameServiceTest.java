@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.ssp.ResultValue;
 import org.ssp.StepValue;
+import org.ssp.exceptions.SspRepositoryException;
 import org.ssp.repository.GameRepository;
 import org.ssp.repository.UserRepository;
 import org.ssp.repository.entity.Game;
@@ -16,6 +17,10 @@ import org.ssp.repository.entity.User;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+import static org.ssp.exceptions.SspException.Ssp_2;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -133,4 +138,18 @@ public class GameServiceTest {
         game.setUser_step_3(user3);
         return game;
     }
+    @Test
+    public void stepFail() {
+        Game game = buildGame(StepValue.PAPER, StepValue.PAPER,
+                StepValue.STONE, StepValue.SCISSORS,
+                StepValue.STONE, StepValue.PAPER);
+        game.setResult(ResultValue.WIN);
+        game.setUser(savedUser);
+        gameRepository.save(game);
+
+        Assertions.assertThrows(SspRepositoryException.class,
+                () -> service.step(savedUser, StepValue.PAPER),
+                () -> Ssp_2.getMessage().formatted(savedUser));
+    }
+
 }
