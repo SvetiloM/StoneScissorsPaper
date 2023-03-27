@@ -6,9 +6,11 @@ import com.esotericsoftware.kryonet.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ssp.Network;
-import org.ssp.ResultValues;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Component
 public class SspServer {
@@ -16,6 +18,8 @@ public class SspServer {
     private Server server;
     @Autowired
     private CommandController commandController;
+
+    private ExecutorService cachedExecutor = Executors.newCachedThreadPool();
 
     public SspServer() throws IOException {
         this.server = new Server() {
@@ -30,21 +34,25 @@ public class SspServer {
             public void received(Connection c, Object object) {
                 if (object instanceof Network.Args) {
                     Network.Args args = (Network.Args) object;
-                    ResultValues resultValue = commandController.execute(args.command, args.login, args.args);
-                    if (resultValue!=null) {
-                        Network.Result result = new Network.Result();
-                        result.result = resultValue;
-                        c.sendTCP(result);
-                    }
+                    CompletableFuture.supplyAsync(() -> commandController.execute(args.command, args.login, args.args), cachedExecutor)
+                            .thenAcceptAsync(resultValue -> {
+                                if (resultValue != null) {
+                                    Network.Result result = new Network.Result();
+                                    result.result = resultValue;
+                                    c.sendTCP(result);
+                                }
+                            });
                 } else if (object instanceof Network.Authorisation) {
                     Network.Authorisation auth = (Network.Authorisation) object;
-                    String token = commandController.signIn(auth.login, auth.password);
-                    Network.AuthorisationToken authToken = new Network.AuthorisationToken();
-                    authToken.token = token;
-                    c.sendTCP(authToken);
+                    CompletableFuture.supplyAsync(() -> commandController.signIn(auth.login, auth.password), cachedExecutor)
+                            .thenAcceptAsync(token -> {
+                                Network.AuthorisationToken authToken = new Network.AuthorisationToken();
+                                authToken.token = token;
+                                c.sendTCP(authToken);
+                            });
                 } else if (object instanceof Network.Registration) {
                     Network.Registration registration = (Network.Registration) object;
-                    commandController.signUp(registration.login, registration.password);
+                    cachedExecutor.execute(()->commandController.signUp(registration.login, registration.password));
                 }
             }
         });
