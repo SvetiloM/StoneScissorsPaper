@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.ssp.ResultValue;
-import org.ssp.StepValues;
+import org.ssp.StepValue;
 import org.ssp.repository.GameRepository;
 import org.ssp.repository.UserRepository;
 import org.ssp.repository.entity.Game;
@@ -64,47 +64,47 @@ public class GameServiceTest {
     @Test
     @Order(2)
     public void stepFirst() {
-        service.step(savedUser, StepValues.PAPER);
+        service.step(savedUser, StepValue.PAPER);
 
         Game lastGame = gameRepository.getLastGame(savedUser.getId()).get();
-        Assertions.assertEquals(lastGame.getUser_step_1(), StepValues.PAPER);
+        Assertions.assertEquals(lastGame.getUser_step_1(), StepValue.PAPER);
         Assertions.assertNotNull(lastGame.getGame_step_1());
     }
 
     @Test
     @Order(3)
     public void stepSecond() {
-        service.step(savedUser, StepValues.SCISSORS);
+        service.step(savedUser, StepValue.SCISSORS);
 
         Game lastGame = gameRepository.getLastGame(savedUser.getId()).get();
-        Assertions.assertEquals(lastGame.getUser_step_2(), StepValues.SCISSORS);
+        Assertions.assertEquals(lastGame.getUser_step_2(), StepValue.SCISSORS);
         Assertions.assertNotNull(lastGame.getGame_step_2());
     }
 
     @Test
     @Order(4)
     public void stepThird() {
-        service.step(savedUser, StepValues.STONE);
+        service.step(savedUser, StepValue.STONE);
 
         Game lastGame = gameRepository.getLastGame(savedUser.getId()).get();
-        Assertions.assertEquals(lastGame.getUser_step_3(), StepValues.STONE);
+        Assertions.assertEquals(lastGame.getUser_step_3(), StepValue.STONE);
         Assertions.assertNotNull(lastGame.getGame_step_3());
     }
 
     public static Stream<Arguments> gameVariants() {
         return Stream.of(
                 Arguments.of(ResultValue.LOSE,
-                        buildGame(StepValues.STONE, StepValues.STONE,
-                                StepValues.SCISSORS, StepValues.PAPER,
-                                StepValues.PAPER, StepValues.STONE)),
+                        buildGame(StepValue.STONE, StepValue.STONE,
+                                StepValue.SCISSORS, StepValue.PAPER,
+                                StepValue.PAPER, StepValue.STONE)),
                 Arguments.of(ResultValue.WIN,
-                        buildGame(StepValues.SCISSORS, StepValues.SCISSORS,
-                                StepValues.PAPER, StepValues.SCISSORS,
-                                StepValues.STONE, StepValues.PAPER)),
+                        buildGame(StepValue.SCISSORS, StepValue.SCISSORS,
+                                StepValue.PAPER, StepValue.SCISSORS,
+                                StepValue.STONE, StepValue.PAPER)),
                 Arguments.of(ResultValue.DRAW,
-                        buildGame(StepValues.PAPER, StepValues.PAPER,
-                                StepValues.STONE, StepValues.SCISSORS,
-                                StepValues.STONE, StepValues.PAPER))
+                        buildGame(StepValue.PAPER, StepValue.PAPER,
+                                StepValue.STONE, StepValue.SCISSORS,
+                                StepValue.STONE, StepValue.PAPER))
         );
     }
 
@@ -115,15 +115,15 @@ public class GameServiceTest {
         game.setUser(savedUser);
         gameRepository.save(game);
 
-        Optional<ResultValue> result = service.step(savedUser, StepValues.PAPER);
+        Optional<ResultValue> result = service.step(savedUser, StepValue.PAPER);
 
         Assertions.assertTrue(result.isPresent());
         Assertions.assertEquals(expected, result.get());
     }
 
-    private static Game buildGame(StepValues game1, StepValues user1,
-                                  StepValues game2, StepValues user2,
-                                  StepValues game3, StepValues user3) {
+    private static Game buildGame(StepValue game1, StepValue user1,
+                                  StepValue game2, StepValue user2,
+                                  StepValue game3, StepValue user3) {
         Game game = new Game();
         game.setGame_step_1(game1);
         game.setGame_step_2(game2);

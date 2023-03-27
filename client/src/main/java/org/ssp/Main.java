@@ -15,7 +15,6 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         scanExecuteCommands(scanner);
-
     }
 
     private static void scanExecuteCommands(Scanner scanner) {
@@ -47,13 +46,13 @@ public class Main {
                 client.start(command);
             }
             case ROCK -> {
-                client.step(command, StepValues.STONE);
+                client.step(command, StepValue.STONE);
             }
             case PAPER -> {
-                client.step(command, StepValues.PAPER);
+                client.step(command, StepValue.PAPER);
             }
             case SCISSORS -> {
-                client.step(command, StepValues.SCISSORS);
+                client.step(command, StepValue.SCISSORS);
             }
         }
     }

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.ssp.Command;
 import org.ssp.ResultValue;
-import org.ssp.StepValues;
+import org.ssp.StepValue;
 import org.ssp.repository.entity.User;
 import org.ssp.security.TokenService;
 import org.ssp.services.GameService;
@@ -30,15 +30,15 @@ public class CommandControllerImpl implements CommandController {
             }
             case ROCK -> {
                 User user = userService.getUser(tokenService.getLoginFromToken(token));
-                return gameService.step(user, StepValues.STONE);
+                return gameService.step(user, StepValue.STONE);
             }
             case PAPER -> {
                 User user = userService.getUser(tokenService.getLoginFromToken(token));
-                return gameService.step(user, StepValues.PAPER);
+                return gameService.step(user, StepValue.PAPER);
             }
             case SCISSORS -> {
                 User user = userService.getUser(tokenService.getLoginFromToken(token));
-                return gameService.step(user, StepValues.SCISSORS);
+                return gameService.step(user, StepValue.SCISSORS);
             }
         }
         return Optional.empty();
@@ -57,8 +57,9 @@ public class CommandControllerImpl implements CommandController {
 
     @Override
     public Optional<ResultValue> lose(String token) {
+        tokenService.validateToken(token);
         User user = userService.getUser(tokenService.getLoginFromToken(token));
-        return gameService.step(user, StepValues.LOSE);
+        return gameService.step(user, StepValue.LOSE);
     }
 
 }

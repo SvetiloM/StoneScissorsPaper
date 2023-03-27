@@ -1,6 +1,6 @@
 package org.ssp;
 
-public enum StepValues {
+public enum StepValue {
     PAPER,
     SCISSORS,
     STONE,

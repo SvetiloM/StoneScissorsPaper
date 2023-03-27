@@ -3,7 +3,7 @@ package org.ssp.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.ssp.ResultValue;
-import org.ssp.StepValues;
+import org.ssp.StepValue;
 import org.ssp.exceptions.SspRepositoryException;
 import org.ssp.repository.GameRepository;
 import org.ssp.repository.entity.Game;
@@ -32,7 +32,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Optional<ResultValue> step(User user, StepValues step) {
+    public Optional<ResultValue> step(User user, StepValue step) {
         Game lastGame = repository.getLastGame(user.getId())
                 .orElseThrow(() -> new SspRepositoryException(Ssp_2, user.getLogin()));
         if (lastGame.getGame_step_1() == null) {
@@ -55,10 +55,10 @@ public class GameServiceImpl implements GameService {
         return lastGame.getResult();
     }
 
-    private StepValues getRandomValue() {
+    private StepValue getRandomValue() {
         Random random = new Random();
-        int i = random.ints(0, StepValues.values().length).findFirst().getAsInt();
-        return StepValues.values()[i];
+        int i = random.ints(0, StepValue.values().length).findFirst().getAsInt();
+        return StepValue.values()[i];
     }
 
     private void countResult(Integer gameId) {
@@ -82,25 +82,25 @@ public class GameServiceImpl implements GameService {
         }
     }
 
-    private byte compareSteps(StepValues game, StepValues user) {
-        if (user.equals(StepValues.LOSE)) return -1;
-        if (game.equals(StepValues.PAPER) &&
-                user.equals(StepValues.STONE)) {
+    private byte compareSteps(StepValue game, StepValue user) {
+        if (user.equals(StepValue.LOSE)) return -1;
+        if (game.equals(StepValue.PAPER) &&
+                user.equals(StepValue.STONE)) {
             return -1;
-        } else if (game.equals(StepValues.SCISSORS) &&
-                user.equals(StepValues.PAPER)) {
+        } else if (game.equals(StepValue.SCISSORS) &&
+                user.equals(StepValue.PAPER)) {
             return -1;
-        } else if (game.equals(StepValues.STONE) &&
-                user.equals(StepValues.SCISSORS)) {
+        } else if (game.equals(StepValue.STONE) &&
+                user.equals(StepValue.SCISSORS)) {
             return -1;
-        } else if (game.equals(StepValues.PAPER) &&
-                user.equals(StepValues.SCISSORS)) {
+        } else if (game.equals(StepValue.PAPER) &&
+                user.equals(StepValue.SCISSORS)) {
             return 1;
-        } else if (game.equals(StepValues.SCISSORS) &&
-                user.equals(StepValues.STONE)) {
+        } else if (game.equals(StepValue.SCISSORS) &&
+                user.equals(StepValue.STONE)) {
             return 1;
-        } else if (game.equals(StepValues.STONE) &&
-                user.equals(StepValues.PAPER)) {
+        } else if (game.equals(StepValue.STONE) &&
+                user.equals(StepValue.PAPER)) {
             return 1;
         }
         return 0;

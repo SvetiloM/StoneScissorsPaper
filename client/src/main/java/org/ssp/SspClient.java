@@ -7,6 +7,6 @@ public interface SspClient {
 
     void start(Command command);
 
-    void step(Command command, StepValues step);
+    void step(Command command, StepValue step);
 
 }

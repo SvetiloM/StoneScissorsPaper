@@ -71,7 +71,7 @@ public class SspClientImpl implements SspClient {
     }
 
     @Override
-    public void step(Command command, StepValues step) {
+    public void step(Command command, StepValue step) {
         Network.Step args = new Network.Step();
         args.command = command;
         args.token = token;

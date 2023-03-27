@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.ssp.ResultValue;
-import org.ssp.StepValues;
+import org.ssp.StepValue;
 import org.ssp.repository.entity.Game;
 
 import java.util.Optional;
@@ -18,17 +18,17 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
     @Transactional
     @Modifying
     @Query("UPDATE Game g SET g.game_step_1=?2, g.user_step_1=?3 WHERE g.id=?1")
-    void setStep1(Integer id, StepValues gameStep, StepValues userStep);
+    void setStep1(Integer id, StepValue gameStep, StepValue userStep);
 
     @Transactional
     @Modifying
     @Query("UPDATE Game g SET g.game_step_2=?2, g.user_step_2=?3 WHERE g.id=?1")
-    void setStep2(Integer id, StepValues gameStep, StepValues userStep);
+    void setStep2(Integer id, StepValue gameStep, StepValue userStep);
 
     @Transactional
     @Modifying
     @Query("UPDATE Game g SET g.game_step_3=?2, g.user_step_3=?3 WHERE g.id=?1")
-    void setStep3(Integer id, StepValues gameStep, StepValues userStep);
+    void setStep3(Integer id, StepValue gameStep, StepValue userStep);
 
     @Transactional
     @Modifying
