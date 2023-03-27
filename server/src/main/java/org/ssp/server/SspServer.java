@@ -46,14 +46,14 @@ public class SspServer {
                                     result.result = resultValue;
                                     c.sendTCP(result);
                                     timerManager.stop(c.getID());
+                                } else {
+                                    Consumer<Byte> sendTime = (sec) -> {
+                                        Network.Time time = new Network.Time();
+                                        time.sec = sec;
+                                        c.sendTCP(time);
+                                    };
+                                    timerManager.start(sendTime, c.getID());
                                 }
-                            }).thenRun(() -> {
-                                Consumer<Byte> sendTime = (sec) -> {
-                                    Network.Time time = new Network.Time();
-                                    time.sec = sec;
-                                    c.sendTCP(time);
-                                };
-                                timerManager.start(sendTime, c.getID());
                             });
                 } else if (object instanceof Network.Authorisation) {
                     Network.Authorisation auth = (Network.Authorisation) object;
