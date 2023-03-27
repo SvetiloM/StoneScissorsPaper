@@ -1,10 +1,9 @@
 package org.ssp.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.ssp.ResultValues;
 import org.ssp.StepValues;
-import org.ssp.exceptions.SspException;
 import org.ssp.exceptions.SspRepositoryException;
 import org.ssp.repository.GameRepository;
 import org.ssp.repository.entity.Game;
@@ -17,10 +16,10 @@ import static org.ssp.exceptions.SspException.Ssp_2;
 import static org.ssp.exceptions.SspException.Ssp_1;
 
 @Component
+@RequiredArgsConstructor
 public class GameServiceImpl implements GameService {
 
-    @Autowired
-    private GameRepository repository;
+    private final GameRepository repository;
 
     @Override
     public void createGame(User user) {

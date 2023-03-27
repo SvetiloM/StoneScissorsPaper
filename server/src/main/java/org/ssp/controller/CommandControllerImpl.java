@@ -1,7 +1,7 @@
 package org.ssp.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.ssp.Command;
 import org.ssp.ResultValues;
 import org.ssp.StepValues;
@@ -10,16 +10,13 @@ import org.ssp.repository.entity.User;
 import org.ssp.services.GameService;
 import org.ssp.services.UserService;
 
-@Component
+@RequiredArgsConstructor
+@Controller
 public class CommandControllerImpl implements CommandController {
 
-    @Autowired
-    private GameService gameService;
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private TokenService tokenService;
+    private final GameService gameService;
+    private final UserService userService;
+    private final TokenService tokenService;
 
     @Override
     public ResultValues execute(Command command, String login) {

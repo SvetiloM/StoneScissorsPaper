@@ -1,6 +1,6 @@
 package org.ssp.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.ssp.exceptions.SspRepositoryException;
 import org.ssp.repository.UserRepository;
@@ -12,10 +12,10 @@ import static org.ssp.exceptions.SspException.Ssp_3;
 import static org.ssp.exceptions.SspException.Ssp_4;
 
 @Component
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void signUp(String login, char[] password) {

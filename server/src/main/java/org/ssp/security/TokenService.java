@@ -1,8 +1,11 @@
 package org.ssp.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.ClaimJwtException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.ssp.exceptions.SspTokenException;
 
 import javax.crypto.SecretKey;
@@ -13,7 +16,7 @@ import java.util.Date;
 import static org.ssp.exceptions.SspException.Ssp_5;
 import static org.ssp.exceptions.SspException.Ssp_6;
 
-@Component
+@Service
 public class TokenService {
 
     private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
