@@ -6,7 +6,7 @@ import java.util.Scanner;
 import static org.ssp.Command.DO_NOTHING;
 import static org.ssp.Command.LOGOUT;
 
-public class Main {
+public class Client {
 
     private static SspClient client;
 

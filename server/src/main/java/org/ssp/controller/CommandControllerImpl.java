@@ -27,13 +27,13 @@ public class CommandControllerImpl implements CommandController {
                     service.start(token);
                 }
                 case ROCK -> {
-                    service.step(StepValue.STONE, token);
+                    return service.step(StepValue.STONE, token);
                 }
                 case PAPER -> {
-                    service.step(StepValue.PAPER, token);
+                    return service.step(StepValue.PAPER, token);
                 }
                 case SCISSORS -> {
-                    service.step(StepValue.SCISSORS, token);
+                    return service.step(StepValue.SCISSORS, token);
                 }
             }
             return Optional.empty();
@@ -65,7 +65,7 @@ public class CommandControllerImpl implements CommandController {
     @Override
     public Optional<ResultValue> lose(String token) {
         try {
-            service.lose(token);
+            return service.lose(token);
         } catch (SspTokenException | SspRepositoryException ex) {
             log.error(ex.getMessage(), ex);
         }
