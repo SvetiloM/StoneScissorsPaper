@@ -23,9 +23,7 @@ public class CommandControllerImpl implements CommandController {
     public Optional<ResultValue> handleCommand(Command command, String token) {
         try {
             switch (command) {
-                case START -> {
-                    service.start(token);
-                }
+                case START -> service.start(token);
                 case ROCK -> {
                     return service.step(StepValue.STONE, token);
                 }
@@ -36,7 +34,6 @@ public class CommandControllerImpl implements CommandController {
                     return service.step(StepValue.SCISSORS, token);
                 }
             }
-            return Optional.empty();
         } catch (SspTokenException | SspRepositoryException ex) {
             log.error(ex.getMessage(), ex);
         }
