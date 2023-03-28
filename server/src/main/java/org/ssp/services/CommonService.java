@@ -1,13 +1,14 @@
-package org.ssp.controller;
+package org.ssp.services;
 
-import org.ssp.Command;
 import org.ssp.ResultValue;
+import org.ssp.StepValue;
 
 import java.util.Optional;
 
-public interface CommandController {
+public interface CommonService {
+    void start(String token);
 
-    Optional<ResultValue> handleCommand(Command command, String token);
+    Optional<ResultValue> step(StepValue value, String token);
 
     String signIn(String login, char[] password);
 

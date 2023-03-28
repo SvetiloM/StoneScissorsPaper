@@ -1,65 +1,75 @@
 package org.ssp.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.ssp.Command;
 import org.ssp.ResultValue;
 import org.ssp.StepValue;
-import org.ssp.repository.entity.User;
-import org.ssp.security.TokenService;
-import org.ssp.services.GameService;
-import org.ssp.services.UserService;
+import org.ssp.exceptions.SspRepositoryException;
+import org.ssp.exceptions.SspTokenException;
+import org.ssp.services.CommonService;
 
 import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class CommandControllerImpl implements CommandController {
 
-    private final GameService gameService;
-    private final UserService userService;
-    private final TokenService tokenService;
+    private final CommonService service;
 
     @Override
-    public Optional<ResultValue> execute(Command command, String token) {
-        tokenService.validateToken(token);
-        switch (command) {
-            case START -> {
-                User user = userService.getUser(tokenService.getLoginFromToken(token));
-                gameService.createGame(user);
+    public Optional<ResultValue> handleCommand(Command command, String token) {
+        try {
+            switch (command) {
+                case START -> {
+                    service.start(token);
+                }
+                case ROCK -> {
+                    service.step(StepValue.STONE, token);
+                }
+                case PAPER -> {
+                    service.step(StepValue.PAPER, token);
+                }
+                case SCISSORS -> {
+                    service.step(StepValue.SCISSORS, token);
+                }
             }
-            case ROCK -> {
-                User user = userService.getUser(tokenService.getLoginFromToken(token));
-                return gameService.step(user, StepValue.STONE);
-            }
-            case PAPER -> {
-                User user = userService.getUser(tokenService.getLoginFromToken(token));
-                return gameService.step(user, StepValue.PAPER);
-            }
-            case SCISSORS -> {
-                User user = userService.getUser(tokenService.getLoginFromToken(token));
-                return gameService.step(user, StepValue.SCISSORS);
-            }
+            return Optional.empty();
+        } catch (SspTokenException | SspRepositoryException ex) {
+            log.error(ex.getMessage(), ex);
         }
         return Optional.empty();
     }
 
     @Override
     public String signIn(String login, char[] password) {
-        userService.signIn(login, password);
-        return tokenService.generateToken(login);
+        try {
+            return service.signIn(login, password);
+        } catch (SspTokenException | SspRepositoryException ex) {
+            log.error(ex.getMessage(), ex);
+        }
+        return "";
     }
 
     @Override
     public void signUp(String login, char[] password) {
-        userService.signUp(login, password);
+        try {
+            service.signUp(login, password);
+        } catch (SspTokenException | SspRepositoryException ex) {
+            log.error(ex.getMessage(), ex);
+        }
     }
 
     @Override
     public Optional<ResultValue> lose(String token) {
-        tokenService.validateToken(token);
-        User user = userService.getUser(tokenService.getLoginFromToken(token));
-        return gameService.step(user, StepValue.LOSE);
+        try {
+            service.lose(token);
+        } catch (SspTokenException | SspRepositoryException ex) {
+            log.error(ex.getMessage(), ex);
+        }
+        return Optional.empty();
     }
 
 }

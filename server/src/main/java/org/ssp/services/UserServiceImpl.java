@@ -2,7 +2,6 @@ package org.ssp.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.stereotype.Component;
 import org.ssp.exceptions.SspRepositoryException;
 import org.ssp.repository.UserRepository;

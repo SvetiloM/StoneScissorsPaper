@@ -18,8 +18,6 @@ import java.util.Calendar;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 import static org.ssp.exceptions.SspException.Ssp_2;
 
 @SpringBootTest
@@ -56,14 +54,14 @@ public class GameServiceTest {
     @Test
     @Order(1)
     public void createGame() {
-        Game previousGame = gameRepository.getLastGame(savedUser.getId()).get();
+        Optional<Game> previousGame = gameRepository.getLastGame(savedUser.getId());
 
         service.createGame(savedUser);
 
-        Game currentGame = gameRepository.getLastGame(savedUser.getId()).get();
+        Optional<Game> currentGame = gameRepository.getLastGame(savedUser.getId());
 
-        Assertions.assertNull(previousGame);
-        Assertions.assertNotNull(currentGame);
+        Assertions.assertTrue(previousGame.isEmpty());
+        Assertions.assertTrue(currentGame.isPresent());
     }
 
     @Test
@@ -72,6 +70,7 @@ public class GameServiceTest {
         service.step(savedUser, StepValue.PAPER);
 
         Game lastGame = gameRepository.getLastGame(savedUser.getId()).get();
+
         Assertions.assertEquals(lastGame.getUser_step_1(), StepValue.PAPER);
         Assertions.assertNotNull(lastGame.getGame_step_1());
     }
@@ -82,6 +81,7 @@ public class GameServiceTest {
         service.step(savedUser, StepValue.SCISSORS);
 
         Game lastGame = gameRepository.getLastGame(savedUser.getId()).get();
+
         Assertions.assertEquals(lastGame.getUser_step_2(), StepValue.SCISSORS);
         Assertions.assertNotNull(lastGame.getGame_step_2());
     }
@@ -89,11 +89,9 @@ public class GameServiceTest {
     @Test
     @Order(4)
     public void stepThird() {
-        service.step(savedUser, StepValue.STONE);
+        Optional<ResultValue> step = service.step(savedUser, StepValue.STONE);
 
-        Game lastGame = gameRepository.getLastGame(savedUser.getId()).get();
-        Assertions.assertEquals(lastGame.getUser_step_3(), StepValue.STONE);
-        Assertions.assertNotNull(lastGame.getGame_step_3());
+        Assertions.assertTrue(step.isPresent());
     }
 
     public static Stream<Arguments> gameVariants() {

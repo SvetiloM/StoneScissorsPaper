@@ -1,49 +1,44 @@
 package org.ssp.controller;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.ssp.Command;
 import org.ssp.StepValue;
-import org.ssp.security.TokenService;
-import org.ssp.services.GameService;
-import org.ssp.services.UserService;
+import org.ssp.exceptions.SspException;
+import org.ssp.exceptions.SspRepositoryException;
+import org.ssp.services.CommonService;
 
 import java.util.stream.Stream;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class CommandControllerTest {
 
     @Test
     public void executeStart() {
-        GameService gameService = mock(GameService.class);
-        CommandController commandController = new CommandControllerImpl(
-                gameService,
-                mock(UserService.class),
-                mock(TokenService.class));
+        String token = "token";
+        CommonService commonService = mock(CommonService.class);
+        CommandController commandController = new CommandControllerImpl(commonService);
 
-        commandController.execute(Command.START, "token");
+        commandController.handleCommand(Command.START, token);
 
-        verify(gameService).createGame(any());
+        verify(commonService).start(eq(token));
     }
 
     @ParameterizedTest
     @MethodSource("stepVariants")
     public void execute(Command command, StepValue stepValue) {
-        GameService gameService = mock(GameService.class);
-        CommandController commandController = new CommandControllerImpl(
-                gameService,
-                mock(UserService.class),
-                mock(TokenService.class));
+        String token = "token";
+        CommonService commonService = mock(CommonService.class);
+        CommandController commandController = new CommandControllerImpl(commonService);
 
-        commandController.execute(command, "token");
+        commandController.handleCommand(command, token);
 
-        verify(gameService).step(any(), eq(stepValue));
+        verify(commonService).step(eq(stepValue), eq(token));
     }
 
     public static Stream<Arguments> stepVariants() {
@@ -55,48 +50,81 @@ public class CommandControllerTest {
     }
 
     @Test
+    public void executeFail() {
+        String token = "token";
+        CommonService commonService = mock(CommonService.class);
+        when(commonService.step(any(), any())).thenThrow(new SspRepositoryException(SspException.Ssp_1, 1));
+        CommandController commandController = new CommandControllerImpl(commonService);
+
+        Assertions.assertDoesNotThrow(() -> commandController.handleCommand(Command.ROCK, token));
+    }
+
+    @Test
     public void signIn() {
-        UserService userService = mock(UserService.class);
-        TokenService tokenService = mock(TokenService.class);
-        CommandController commandController = new CommandControllerImpl(
-                mock(GameService.class),
-                userService,
-                tokenService);
+        CommonService commonService = mock(CommonService.class);
+        CommandController commandController = new CommandControllerImpl(commonService);
         String login = "login";
         char[] password = "password".toCharArray();
 
         commandController.signIn(login, password);
 
-        verify(userService).signIn(eq(login), eq(password));
-        verify(tokenService).generateToken(eq(login));
+        verify(commonService).signIn(eq(login), eq(password));
+    }
+
+    @Test
+    public void signInFail() {
+        CommonService commonService = mock(CommonService.class);
+        when(commonService.signIn(any(), any())).thenThrow(new SspRepositoryException(SspException.Ssp_1, 1));
+        CommandController commandController = new CommandControllerImpl(commonService);
+        String login = "login";
+        char[] password = "password".toCharArray();
+
+        Assertions.assertDoesNotThrow(() -> commandController.signIn(login, password));
     }
 
     @Test
     public void signUp() {
-        UserService userService = mock(UserService.class);
-        CommandController commandController = new CommandControllerImpl(
-                mock(GameService.class),
-                userService,
-                mock(TokenService.class));
+        CommonService commonService = mock(CommonService.class);
+        CommandController commandController = new CommandControllerImpl(commonService);
         String login = "login";
         char[] password = "password".toCharArray();
 
         commandController.signUp(login, password);
 
-        verify(userService).signUp(eq(login), eq(password));
+        verify(commonService).signUp(eq(login), eq(password));
+    }
+
+    @Test
+    public void signUpFail() {
+        CommonService commonService = mock(CommonService.class);
+        doAnswer(invocationOnMock -> {
+            throw new SspRepositoryException(SspException.Ssp_1, 1);
+        }).when(commonService).signUp(any(), any());
+        CommandController commandController = new CommandControllerImpl(commonService);
+        String login = "login";
+        char[] password = "password".toCharArray();
+
+        Assertions.assertDoesNotThrow(() -> commandController.signUp(login, password));
     }
 
     @Test
     public void lose() {
-        GameService gameService = mock(GameService.class);
-        CommandController commandController = new CommandControllerImpl(
-                gameService,
-                mock(UserService.class),
-                mock(TokenService.class));
+        CommonService commonService = mock(CommonService.class);
+        CommandController commandController = new CommandControllerImpl(commonService);
         String token = "token";
 
         commandController.lose(token);
 
-        verify(gameService).step(any(), eq(StepValue.LOSE));
+        verify(commonService).lose(eq(token));
+    }
+
+    @Test
+    public void loseFail() {
+        CommonService commonService = mock(CommonService.class);
+        when(commonService.lose(any())).thenThrow(new SspRepositoryException(SspException.Ssp_1, 1));
+        CommandController commandController = new CommandControllerImpl(commonService);
+        String token = "token";
+
+        Assertions.assertDoesNotThrow(() -> commandController.lose(token));
     }
 }

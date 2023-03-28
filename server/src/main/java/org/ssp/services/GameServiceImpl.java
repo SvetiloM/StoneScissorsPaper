@@ -52,6 +52,11 @@ public class GameServiceImpl implements GameService {
     public ResultValue getGameResult(Integer gameId) {
         Game lastGame = repository.findById(gameId)
                 .orElseThrow(() -> new SspRepositoryException(Ssp_1, gameId));
+        if (lastGame.getResult() == null) {
+            countResult(gameId);
+            lastGame = repository.findById(gameId)
+                    .orElseThrow(() -> new SspRepositoryException(Ssp_1, gameId));
+        }
         return lastGame.getResult();
     }
 

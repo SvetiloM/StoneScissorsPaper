@@ -3,6 +3,7 @@ package org.ssp.server;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Component;
 import org.ssp.Network;
 import org.ssp.ResultValue;
@@ -39,7 +40,7 @@ public class SspServerListener extends Listener {
     }
 
     private void step(Network.Step step, Connection connection) {
-        CompletableFuture.supplyAsync(() -> commandController.execute(step.command, step.token), cachedExecutor)
+        CompletableFuture.supplyAsync(() -> commandController.handleCommand(step.command, step.token), cachedExecutor)
                 .thenAcceptAsync(resultValue -> {
                     if (resultValue.isPresent()) {
                         sendResult(resultValue.get(), connection);
@@ -51,13 +52,13 @@ public class SspServerListener extends Listener {
     }
 
     private void sendResult(ResultValue resultValue, Connection connection) {
-        Network.Result result = new Network.Result();
+        val result = new Network.Result();
         result.result = resultValue;
         connection.sendTCP(result);
     }
 
     private void sendTime(int sec, Connection connection) {
-        Network.Time time = new Network.Time();
+        val time = new Network.Time();
         time.sec = sec;
         connection.sendTCP(time);
     }

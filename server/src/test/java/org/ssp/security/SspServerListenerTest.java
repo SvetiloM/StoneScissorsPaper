@@ -99,7 +99,7 @@ public class SspServerListenerTest {
         listener.received(connection, step);
 
         //THEN
-        verify(commandController).execute(eq(Command.START), eq(token));
+        verify(commandController).handleCommand(eq(Command.START), eq(token));
         verify(timerManager).start(any(), any(), eq(1));
     }
 
@@ -109,7 +109,7 @@ public class SspServerListenerTest {
         String token = "token";
 
         CommandController commandController = mock(CommandController.class);
-        when(commandController.execute(eq(Command.ROCK), any())).thenReturn(Optional.of(ResultValue.LOSE));
+        when(commandController.handleCommand(eq(Command.ROCK), any())).thenReturn(Optional.of(ResultValue.LOSE));
 
         TimerManager timerManager = mock(TimerManager.class);
         ExecutorService fakeExecutorService = new FakeExecutorService();
@@ -129,7 +129,7 @@ public class SspServerListenerTest {
         listener.received(connection, step);
 
         //THEN
-        verify(commandController).execute(eq(Command.ROCK), eq(token));
+        verify(commandController).handleCommand(eq(Command.ROCK), eq(token));
         verify(connection).sendTCP(any(Network.Result.class));
         verify(timerManager).stop(eq(1));
     }
